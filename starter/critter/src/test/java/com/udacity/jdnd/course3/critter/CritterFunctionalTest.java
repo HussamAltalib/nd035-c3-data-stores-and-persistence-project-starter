@@ -21,6 +21,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
  * Students will need to configure the application to run these tests by adding application.properties file
@@ -49,7 +52,7 @@ public class CritterFunctionalTest {
         CustomerDTO retrievedCustomer = userController.getAllCustomers().get(0);
         Assertions.assertEquals(newCustomer.getName(), customerDTO.getName());
         Assertions.assertEquals(newCustomer.getId(), retrievedCustomer.getId());
-        Assertions.assertTrue(retrievedCustomer.getId() > 0);
+        assertTrue(retrievedCustomer.getId() > 0);
     }
 
     @Test
@@ -59,7 +62,7 @@ public class CritterFunctionalTest {
         EmployeeDTO retrievedEmployee = userController.getEmployee(newEmployee.getId());
         Assertions.assertEquals(employeeDTO.getSkills(), newEmployee.getSkills());
         Assertions.assertEquals(newEmployee.getId(), retrievedEmployee.getId());
-        Assertions.assertTrue(retrievedEmployee.getId() > 0);
+        assertTrue(retrievedEmployee.getId() > 0);
     }
 
     @Test
@@ -78,13 +81,15 @@ public class CritterFunctionalTest {
 
         //make sure you can retrieve pets by owner
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId());
-        Assertions.assertEquals(newPet.getId(), pets.get(0).getId());
-        Assertions.assertEquals(newPet.getName(), pets.get(0).getName());
+        Assertions.assertEquals(newPet.getId(), pets.getFirst().getId());
+        Assertions.assertEquals(newPet.getName(), pets.getFirst().getName());
 
         //check to make sure customer now also contains pet
-        CustomerDTO retrievedCustomer = userController.getAllCustomers().get(0);
-        Assertions.assertTrue(retrievedCustomer.getPetIds() != null && retrievedCustomer.getPetIds().size() > 0);
-        Assertions.assertEquals(retrievedCustomer.getPetIds().get(0), retrievedPet.getId());
+        CustomerDTO retrievedCustomer = userController.getAllCustomers().getFirst();
+        System.out.println("retrievedCustomer: "+ retrievedCustomer);
+        System.out.println("retrievedCustomer.getPetIds()  "+retrievedCustomer.getPetIds() + " retrievedCustomer.getPetIds().isEmpty() :"+ retrievedCustomer.getPetIds().isEmpty());
+        assertTrue(retrievedCustomer.getPetIds() != null && !retrievedCustomer.getPetIds().isEmpty());
+        Assertions.assertEquals(retrievedCustomer.getPetIds().getFirst(), retrievedPet.getId());
     }
 
     @Test

@@ -1,9 +1,13 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -16,29 +20,92 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+        Customer customer = new Customer();
+        customer.setName(customerDTO.getName());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setNotes(customerDTO.getNotes());
+        List<Pet> petList = new ArrayList<>();
+        customer.setPets(petList);
+//        System.out.println("the size is: " + customerDTO.getPetIds().size());
+//        if(customerDTO.getPetIds().size() > 0) {
+//            for (int i = 0; i <= customerDTO.getPetIds().size(); i++) {
+//                Pet newPet = new Pet();
+//                petList.add(newPet);
+//            }
+//        }
+
+//        Pet pet = new Pet();
+//        customer.getPets().add(pet);
+
+        Customer savedCustomer = userService.createCustomer(customer);
+
+        CustomerDTO savedCustomerDTO = new CustomerDTO();
+        savedCustomerDTO.setId(savedCustomer.getId());
+        savedCustomerDTO.setName(savedCustomer.getName());
+        savedCustomerDTO.setPhoneNumber(savedCustomer.getPhoneNumber());
+        savedCustomerDTO.setNotes(savedCustomer.getNotes());
+        List<Long> petIdsList = new ArrayList<>();
+        for (int i = 0; i< savedCustomer.getPets().size(); i++){
+            petIdsList.add(savedCustomer.getPets().get(i).getId());
+        }
+        savedCustomerDTO.setPetIds(petIdsList);
+
+//        throw new UnsupportedOperationException();
+        return savedCustomerDTO;
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        return userService.findAllCustomers();
+//        throw new UnsupportedOperationException();
     }
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Customer customer = userService.getCustomerByPet(petId);
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+
+        return customerDTO;
     }
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setSkills(employeeDTO.getSkills());
+        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+
+        Employee savedEmployee = userService.saveEmployee(employee);
+
+        EmployeeDTO savedEmployeeDTO = new EmployeeDTO();
+        savedEmployeeDTO.setId(savedEmployee.getId());
+        savedEmployeeDTO.setName(savedEmployee.getName());
+        savedEmployeeDTO.setSkills(savedEmployee.getSkills());
+        savedEmployeeDTO.setDaysAvailable(savedEmployee.getDaysAvailable());
+
+        return savedEmployeeDTO;
+//        throw new UnsupportedOperationException();
     }
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Optional<Employee> savedEmployee = userService.getEmployee(employeeId);
+        EmployeeDTO savedEmployeeDTO = new EmployeeDTO();
+        savedEmployeeDTO.setId(savedEmployee.get().getId());
+        savedEmployeeDTO.setName(savedEmployee.get().getName());
+        savedEmployeeDTO.setSkills(savedEmployee.get().getSkills());
+        savedEmployeeDTO.setDaysAvailable(savedEmployee.get().getDaysAvailable());
+
+        return savedEmployeeDTO;
+//        throw new UnsupportedOperationException();
     }
 
     @PutMapping("/employee/{employeeId}")

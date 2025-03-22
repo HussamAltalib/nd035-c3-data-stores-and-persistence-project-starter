@@ -1,23 +1,26 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 /**
  * Represents the form that customer request and response data takes. Does not map
  * to the database directly.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDTO {
-    private long id;
+    private Long id;
     private String name;
     private String phoneNumber;
     private String notes;
     private List<Long> petIds;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,5 +54,16 @@ public class CustomerDTO {
 
     public void setPetIds(List<Long> petIds) {
         this.petIds = petIds;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", notes='" + notes + '\'' +
+                ", petIds=" + petIds +
+                '}';
     }
 }

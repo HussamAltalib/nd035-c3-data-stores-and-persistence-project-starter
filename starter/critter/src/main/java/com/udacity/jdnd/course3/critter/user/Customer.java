@@ -9,7 +9,7 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String phoneNumber;
     private String notes;
@@ -20,19 +20,18 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(long id, String name, String phoneNumber, String notes, List<Pet> pets) {
-        this.id = id;
+    public Customer(String name, String phoneNumber, String notes, List<Pet> pets) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.notes = notes;
         this.pets = pets;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,5 +65,16 @@ public class Customer {
 
     public void setPets(List<Pet> pets) {
         this.pets = pets;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", notes='" + notes + '\'' +
+                ", pets=" + pets +
+                '}';
     }
 }

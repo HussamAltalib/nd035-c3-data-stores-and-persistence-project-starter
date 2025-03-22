@@ -78,4 +78,16 @@ public class Pet {
     public void setOwner(Customer owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", birthDate=" + birthDate +
+                ", notes='" + notes + '\'' +
+                ", owner=" + owner +
+                '}';
+    }
 }
